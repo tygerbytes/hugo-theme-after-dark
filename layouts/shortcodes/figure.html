@@ -8,7 +8,9 @@ Internal usage reference:
 https://gohugo.io/content-management/shortcodes/#figure
 */}}-->
 {{ $src := .Get "src" }}
-{{ $lqipsrc := .Get "lqipsrc" }}
+{{ $original := .Page.Resources.GetMatch (printf "%s*" ($src)) }}
+{{ if not $original}}{{ errorf "(figure.html) %s: Unable to find image \"%s\"" $.Page.RelPermalink $src }}{{ end }}
+{{ $isSmallImage := lt $original.Width 780 }}
 {{ $caption := .Get "caption" }}
 {{ $link := .Get "link" }}
 {{ $linktarget := .Get "linktarget" }}
@@ -17,13 +19,45 @@ https://gohugo.io/content-management/shortcodes/#figure
 {{ $alt := .Get "alt" }}
 {{ $title := .Get "title" }}
 {{ $class := .Get "class" }}
+
+{{ if $isSmallImage }}
+  {{ .Scratch.Set "imageLqip" (($original).Resize (printf "%vx q60 Center" $original.Width)) }}
+  {{ .Scratch.Set "imageFullSize" (($original).Resize (printf "%vx%v q90" $original.Width $original.Height)) }}
+{{ else }}
+  {{ .Scratch.Set "imageLqip" (($original).Resize "780x q60 Center") }}
+  {{ .Scratch.Set "image300" (($original).Resize "300x Center") }}
+  {{ .Scratch.Set "image391" (($original).Resize "391x Center") }}
+  {{ .Scratch.Set "image480" (($original).Resize "480x Center") }}
+  {{ .Scratch.Set "image600" (($original).Resize "600x Center") }}
+  {{ .Scratch.Set "image780" (($original).Resize "780x q90 Center") }}
+{{ end }}
+{{ $imageLqip := .Scratch.Get "imageLqip" }}
+{{ $imageFullSize := .Scratch.Get "imageFullSize" }}
+{{ $image300 := .Scratch.Get "image300" }}
+{{ $image391 := .Scratch.Get "image391" }}
+{{ $image480 := .Scratch.Get "image480" }}
+{{ $image600 := .Scratch.Get "image600" }}
+{{ $image780 := .Scratch.Get "image780" }}
+
 <figure{{ with $class }} class="{{ . }}"{{ end }}>
   {{ with $link }}<a href="{{ . }}"{{ if $linktarget }} target="{{ $linktarget }}"{{ end }}{{ if eq $linktarget "_blank" }} rel="external noopener noreferrer"{{ end }}>{{ end }}
-    {{ if $lqipsrc }}
-      <img class="lazyload blur-up" src="{{ $lqipsrc }}" data-src="{{ $src }}" {{ if or $alt $caption }}alt="{{ with $alt }}{{ . }}{{ else }}{{ $caption }}{{ end }}"{{ end }} />
-    {{ else }}
-      <img class="lazyload" data-src="{{ $src }}" {{ if or $alt $caption }}alt="{{ with $alt }}{{ . }}{{ else }}{{ $caption }}{{ end }}"{{ end }} />
-    {{ end }}
+    <img 
+      class="lazyload blur-up"
+      src="{{ $imageLqip.RelPermalink }}"
+      {{ if not $isSmallImage }}
+        style="width: 100%"
+        data-src="{{ $image780.RelPermalink }}"
+        data-srcset="{{$image300.RelPermalink }} 300w
+        {{ if $image391 }} ,{{ $image391.RelPermalink }} 391w {{ end }}
+        {{ if $image480 }} ,{{ $image480.RelPermalink }} 480w {{ end }}
+        {{ if $image600 }} ,{{ $image600.RelPermalink }} 600w {{ end }}
+        {{ if $image780 }} ,{{ $image780.RelPermalink }} 780w {{ end }}"
+        data-sizes="auto"
+      {{else}}
+        data-src="{{ $imageFullSize.RelPermalink }}"
+      {{end}}
+      {{ if or $alt $caption }}alt="{{ with $alt }}{{ . }}{{ else }}{{ $caption }}{{ end }}"{{ end }}
+     />
   {{ if $link }}</a>{{ end }}
   {{ if or (or $title $caption) $attr }}
   <figcaption>{{ if isset .Params "title" }}

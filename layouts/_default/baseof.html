@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="{{ .Site.LanguageCode }}">
   <head>
-    {{ .Hugo.Generator }}
+    {{ hugo.Generator }}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ block "title" . }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+    {{ $title := delimit (slice .Title "|" .Site.Title) " " }}
+    <title>{{ $title }}</title>
     <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
     <meta name="keywords" content="{{ if .Keywords }}{{ delimit .Keywords ", " }}{{ else if and .IsPage .Params.tags }}{{ delimit .Params.tags ", " }}{{ else }}{{ range $term, $val := .Site.Taxonomies.categories }}{{ lower (humanize $term) }}, {{ end }}{{ end }}">
     {{ $default_noindex_kinds := slice "section" "taxonomy" "taxonomyTerm" }}
@@ -15,18 +16,27 @@
     {{ end }}
     {{ partial "meta/name-author.html" . }}
     {{ template "_internal/opengraph.html" . }}
-    {{ template "_internal/twitter_cards.html" . }}
+    {{ partial "head/seo/twitter_cards.html" . }}
     {{ partial "meta/ogimage-maybe.html" . }}
     {{ partial "meta/theme-color.html" . }}
     {{ if eq .Kind "home" }}
       {{ partial "head/site-verification.html" . }}
     {{ end }}
     {{ partial "meta/http-referrer.html" . }}
-    {{ template "_internal/google_analytics_async.html" . }}
+    {{- if eq (getenv "HUGO_ENV") "development" -}}
+      {{ "<!-- No Google Analytics in development -->" | safeHTML }}
+    {{- else -}}
+      {{- template "_internal/google_analytics_async.html" . -}}
+    {{- end -}}
     {{ if .RSSLink }}
       <link href="{{ .RSSLink }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}">
     {{ end }}
     <link rel="canonical" href="{{ .Permalink }}">
+
+    <link rel="manifest" href="{{ "/manifest.json" | relURL }}">
+    <meta name="application-name" content="{{ $title }}">
+    <meta name="theme-color" content="#cc3302">
+
     {{ if (isset .Params "prev") }}
       <link rel="prev" href="{{ .Params.prev }}">
     {{ end }}
@@ -36,6 +46,7 @@
     {{ partial "head/favicon.html" . }}
     {{ partial "global-styles.html" . }}
     {{ partial "async-scripts.html" . }}
+    <script defer src="{{ "static/js/main.bundle.js" | relURL }}"></script>
   </head>
   {{ $theme_variant := .Site.Params.theme_variant | default "hack dark" }}
   <body class="{{ $theme_variant }} main container">

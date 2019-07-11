@@ -2,13 +2,10 @@
   {{ partial "menu.html" . }}
 {{ end }}
 {{ define "main" }}
-  <article itemscope itemtype="http://schema.org/BlogPosting">
+  <article itemscope itemtype="https://schema.org/AboutPage">
     {{ template "_internal/schema.html" . }}
     <header>
       <h1 itemprop="headline">{{ .Title }}</h1>
-      <p class="muted">
-        {{ partial "post/meta.html" . }}
-      </p>
       {{ if .Description }}
         <blockquote itemprop="description">{{ .Description }}</blockquote>
       {{ end }}
@@ -30,15 +27,8 @@
     <div itemprop="articleBody">
       {{ .Content }}
     </div>
-    {{ if .Site.DisqusShortname }}
-      <article>
-        {{ template "_internal/disqus.html" . }}
-      </article>
-    {{ end }}
     <footer>
       <hr>
-      {{ partial "post/byline.html" . }}
-      {{ partial "post/related-content.html" . }}
     </footer>
   </article>
 {{ end }}

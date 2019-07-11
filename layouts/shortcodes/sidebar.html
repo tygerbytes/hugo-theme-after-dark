@@ -1,0 +1,12 @@
+<!--{{/*
+Basic usage:
+{{% sidebar header="Heading of the aside" %}}
+Content here
+{{% /sidebar }}
+*/}}-->
+{{ $header := .Get "header" }}
+<aside class="sidebar">
+{{ if $header }}  <header>{{ $header }}</header>
+  <hr />{{ end }}
+{{ .Inner }}
+</aside>

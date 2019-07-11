@@ -1,7 +1,7 @@
 name = "After Dark"
-license = "WTFPL"
+license = "MIT"
 licenselink = "https://github.com/comfusion/after-dark/blob/master/COPYING"
-description = "A retro dark theme for Hugo."
+description = "A retro theme for Hugo."
 homepage = "https://comfusion.github.io/after-dark/"
 tags = [
   "personal",
@@ -9,7 +9,6 @@ tags = [
   "minimal",
   "responsive",
   "accessible",
-  "search",
   "dark",
   "blog"
 ]
@@ -20,8 +19,6 @@ features = [
   "Flexbox Layouts",
   "Google Analytics",
   "Disqus",
-  "BPG Image Support",
-  "Fuzzy Search",
   "Lazy Loading",
   "Responsive Images",
   "Low-Quality Image Placeholders",
@@ -42,7 +39,7 @@ features = [
   "Inclusive Design",
   "Theme Variants"
 ]
-min_version = 0.27
+min_version = 0.43
 
 [author]
   name = "Josh Habdas"

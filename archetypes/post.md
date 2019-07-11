@@ -1,27 +1,39 @@
-+++
-title = "{{ replace .TranslationBaseName "-" " " | title }}"
-date = {{ .Date }}
-description = "Thank you for choosing After Dark."
-draft = true
-toc = false
-categories = ["technology"]
-tags = ["hello", "world"]
-images = [
-  "https://source.unsplash.com/category/technology/1600x900"
-] # overrides the site-wide open graph image
-+++
+---
+title: {{ .Name | humanize }}
+date: {{ .Date }}
+publishdate: {{ .Date }}
+description: "INSERT NICE DESCRIPTION"
+draft: true
+toc: false
+author: 
+categories:
+ - ""
+tags:
+- ""
+url: /{{ .Name | urlize }}/
+resources:
+- src: images/{{ .Name | urlize }}-header.png
+  name: header
+---
 
-Before you continue, please take a moment to configure your archetypes.
-
-Archetypes are located in the `archetypes` directory in the source of your site. To learn more about archetypes, visit [Archetypes](https://gohugo.io/content-management/archetypes/) on the Hugo website. And when you're ready, check out the [Customizing](https://comfusion.github.io/after-dark/#customizing) section of the After Dark documentation for additional options.
+**Interest arousing introduction.**
 
 <!--more-->
-This information appears below the [Summary Split](https://gohugo.io/content-management/summaries/).
+* This is a link: [Summary Split](https://gohugo.io/content-management/summaries/).
+* this is a figure: {{< figure src="images/command_prompt-1.png" caption="Now what? I can't recall." >}}
 
-After Dark supports the `bpg` image format without any additional configuration necessary. Here's an example BPG image animation:
+> Blockquote
 
-<img src="/bpg/cinemagraph-6.bpg" alt="BPG file format example">
+{{< highlight bash >}}
+git config greenbase.provider travisci
+{{</ highlight >}}
 
-BPG compresses the above animation to `48KB`, about **97% smaller** than what would be possible with GIF. In addition to animation BPG handles still images as well. Head to the [side-by-side comparisons](http://xooyoozoo.github.io/yolo-octo-bugfixes/#vallee-de-colca&jpg=s&bpg=s) to see BPG stacked up against JPEG. Create your own BPG images using the [BPG web encoder](https://webencoder.libbpg.org/) for use on your After Dark site.
+{{< youtube CODE >}}
 
-See the <a href="https://github.com/comfusion/after-dark/blob/master/README.md" target="_blank" rel="noopener nofollow">After Dark `README`</a> for more info.
+{{< table-of-contents >}}
+
+## Point I
+
+### Subpoint ii
+
+**Conclusion**

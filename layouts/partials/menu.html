@@ -1,8 +1,15 @@
 {{ if ne .Site.Params.show_menu false }}
-  <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+  <nav itemscope itemtype="https://schema.org/SiteNavigationElement">
     {{ $currentNode := . }}
     {{ range .Site.Menus.main }}
-      <a itemprop="url" class="{{if or ($currentNode.IsMenuCurrent "main" .) ($currentNode.HasMenuCurrent "main" .) }}active{{end}}" href="{{ .URL }}"><span itemprop="name">{{ .Name }}</span></a>
+      <a itemprop="url" class="{{if or ($currentNode.IsMenuCurrent "main" .) ($currentNode.HasMenuCurrent "main" .) }}active{{end}}" href="{{ .URL }}"><svg class="nav-icon-main" aria-hidden="true" role="img"><use xlink:href="{{ "static/svg/sprite.symbol.svg#" | relURL }}{{ .Pre }}"/></svg> <span itemprop="name">{{ .Name }}</span></a>
+      {{ end }}
+  </nav>
+  <nav class="nav_social" style="padding-top: 14px;">
+    {{ range .Site.Menus.social }}
+      <a itemprop="url_social" href="{{ .URL }}" target="_blank" rel="noopener">
+        <svg class="nav-icon-social" aria-labelledby="title-{{ .Identifier }}"><title id="title-{{ .Identifier }}">{{ .Name }}</title><use xlink:href="{{ "static/svg/sprite.symbol.svg#" | relURL }}{{ .Identifier }}" /></svg>
+      </a>
     {{ end }}
   </nav>
 {{ end }}
