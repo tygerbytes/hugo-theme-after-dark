@@ -12,6 +12,7 @@
       {{ if .Description }}
         <blockquote itemprop="description">{{ .Description }}</blockquote>
       {{ end }}
+      {{ partial "post/affiliate.html"}}
       {{ if .Resources.GetMatch "header" }}
         {{ $image600 := (.Resources.GetMatch "header").Fill "600x338 q60 Center" }}
         {{ $image900 := (.Resources.GetMatch "header").Fill "900x506 q70 Center" }}
