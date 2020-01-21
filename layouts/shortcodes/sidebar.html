@@ -8,5 +8,5 @@ Content here
 <aside class="sidebar">
 {{ if $header }}  <header>{{ $header }}</header>
   <hr />{{ end }}
-{{ .Inner }}
+{{ .Inner | markdownify }}
 </aside>
